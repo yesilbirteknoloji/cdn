@@ -3,14 +3,26 @@ localhost:8080 {
 }
 
 ybt.net.tr {
+
+    # Tüm içerik reverse proxy'den geliyor
     reverse_proxy 213.238.180.207 {
         header_up Host {host}
         header_up X-Real-IP {remote}
     }
 
+    # Tüm sayfalara güvenlik başlıkları
     header {
-        Cache-Control "public, max-age=86400"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
     }
 
+    # Sıkıştırma (tüm içerik için aktif)
     encode gzip zstd
+
+    # Statik dosyalar için özel cache yönlendirmesi (örnek dizinler)
+    @staticFiles path_regexp \.(?:js|css|png|jpg|jpeg|gif|svg|woff2?|ttf|eot)$
+    header @staticFiles {
+        Cache-Control "public, max-age=86400"
+    }
 }
