@@ -1,3 +1,7 @@
 localhost:8080 {
-    respond "GitHub Desktop ile Caddy!"
+    respond "CDN ACTIVE!"
+}
+
+ybt.net.tr {
+    reverse_proxy 213.238.180.207
 }
