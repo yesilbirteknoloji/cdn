@@ -2,31 +2,25 @@ localhost:8080 {
     respond "CDN ACTIVE!"
 }
 
+# www'den ana domaine kalıcı yönlendirme (301)
+www.ybt.net.tr {
+    redir https://ybt.net.tr{uri} permanent
+}
+
+# Ana domain, proxy ve TLS yönetimi burada
 ybt.net.tr {
-    # Reverse proxy Plesk sunucusuna yönlendiriliyor
     reverse_proxy 213.238.180.207 {
         header_up Host {host}
-        header_up X-Real-IP {remote}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
     }
 
-    # Güvenlik başlıkları ekleniyor
-    header {
-        X-Content-Type-Options "nosniff"
-        X-Frame-Options "DENY"
-        Referrer-Policy "strict-origin-when-cross-origin"
-    }
+    tls info@ybt.net.tr
 
-    # İçerik sıkıştırması aktifleştiriliyor
-    encode gzip zstd
-
-    # Statik dosyalar için özel cache yönlendirmesi
-    @staticFiles path_regexp \.(?:js|css|png|jpg|jpeg|gif|svg|woff2?|ttf|eot)$
-    header @staticFiles {
-        Cache-Control "public, max-age=86400"
-    }
-
-    # Let's Encrypt üzerinden otomatik TLS sağlama
-    tls {
-        bilgi@ugursahin.net.tr
+    handle /.well-known/acme-challenge/* {
+        root * /var/www/vhosts/ybt.net.tr/httpdocs
+        file_server
+        try_files {path} =404
     }
 }
