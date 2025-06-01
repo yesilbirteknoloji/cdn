@@ -1,5 +1,5 @@
 localhost:8080 {
-    respond "CDN ACTIVE!"
+    respond "CDN's ACTIVE!"
 }
 
 # www'den ana domaine kalıcı yönlendirme (301)
