@@ -25,12 +25,15 @@ ybt.net.tr {
     }
 }
 
-# sunucu.us -> 135.181.56.220 yönlendir
-sunucu.us {
-    reverse_proxy 135.181.56.220
-}
 
-# betsolosite.com, betsologiris.com, betsologuncel.com -> 135.181.56.214 yönlendir
-betsolosite.com, betsologiris.com, betsologuncel.com {
-    reverse_proxy 135.181.56.214
+
+
+sunucu.us {
+    reverse_proxy 135.181.56.220 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+	
 }
