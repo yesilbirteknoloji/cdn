@@ -24,3 +24,13 @@ ybt.net.tr {
         try_files {path} =404
     }
 }
+
+# sunucu.us -> 135.181.56.220 yönlendir
+sunucu.us {
+    reverse_proxy 135.181.56.220
+}
+
+# betsolosite.com, betsologiris.com, betsologuncel.com -> 135.181.56.214 yönlendir
+betsolosite.com, betsologiris.com, betsologuncel.com {
+    reverse_proxy 135.181.56.214
+}
