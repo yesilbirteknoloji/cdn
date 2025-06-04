@@ -1,25 +1,20 @@
-# Local test/health port
 :8080 {
     respond "CDN's ACTIVE!"
 }
 
-# www yönlendirmesi (301)
 www.ybt.net.tr {
     redir https://ybt.net.tr{uri} permanent
 }
 
-# ybt.net.tr domaini reverse proxy ve TLS
 ybt.net.tr {
     tls info@ybt.net.tr
 
-    # Let's Encrypt doğrulama yolu
     handle_path /.well-known/acme-challenge/* {
         root * /var/www/vhosts/ybt.net.tr/httpdocs
         file_server
         try_files {path} =404
     }
 
-    # Ana reverse proxy işlemi
     reverse_proxy 213.238.180.207 {
         header_up Host {host}
         header_up X-Real-IP {remote_host}
@@ -28,12 +23,6 @@ ybt.net.tr {
     }
 }
 
-# sunucu.us domaini reverse proxy
 sunucu.us {
-    reverse_proxy 135.181.56.220 {
-        header_up Host {host}
-        header_up X-Real-IP {remote_host}
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Forwarded-Proto {scheme}
-    }
+    reverse_proxy 135.181.56.220
 }
